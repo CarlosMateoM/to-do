@@ -12,8 +12,7 @@ class AuthController extends Controller
 {
     public function __construct(
         private AuthService $authService
-    )
-    {}
+    ) {}
 
 
     public function login(LoginRequest $request)
@@ -28,9 +27,11 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request) 
     {
-        $user = $this->authService->register($request);
+        $this->authService->register($request);
 
-        return new UserResource($user);
+        return response()->json([
+            'message' => 'usuario registrado correctamente'
+        ], 201);
     }
 
     public function logout(Request $request)

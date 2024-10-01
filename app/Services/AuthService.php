@@ -7,29 +7,30 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class AuthService 
 {
     
     public function login(LoginRequest $request) 
     {
-        $user = User::where('email', $request->input('email'))
-            ->firstOrFail();
+        $user = User::where('email', $request->input('email'))->first();
 
-        $credentials = [
-            'email'     => $request->input('email'),
-            'password'  => $request->input('password')
-        ];
-
-        if(Auth::attempt($credentials)) {
-            
-            return $user->createToken();
+        if(!$user) {
+            throw ValidationException::withMessages([
+                'email' => 'El usuario no existe'
+            ]);
         }
- 
 
-        return response()->json([
-            'message' => 'el correo o la contraseña no coinciden'
-        ], 422);
+        $credentials = $request->only('email', 'password');
+        
+        if(!Auth::attempt($credentials)) {
+            throw ValidationException::withMessages([
+                'email' => 'El email o la contraseña son incorrectos'
+            ]);
+        }
+        
+        return $user->createToken('auth')->plainTextToken;
     }
 
     public function register(RegisterRequest $request): User
