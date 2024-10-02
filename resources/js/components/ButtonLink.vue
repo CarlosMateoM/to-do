@@ -17,7 +17,7 @@ import { RouterLink } from 'vue-router';
 
 const props = defineProps({
     to: {
-        type: String,
+        type: Object,
         required: true
     },
     text: {

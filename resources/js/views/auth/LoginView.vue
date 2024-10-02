@@ -105,6 +105,7 @@
 <script setup>
 import Button from '../../components/Button.vue';
 import { RouterLink } from 'vue-router';
+import router from '../../router';
 import { useStore } from 'vuex';
 import { ref } from 'vue';
 
@@ -125,7 +126,7 @@ const login = async (event) => {
 
         if (response.status === 200) {
             event.target.reset();
-            //router.push({name: 'home'});
+            router.push({name: 'notes.index'});
         }
     } catch (error) {
         errors.value = error.response.data.message;

@@ -23,8 +23,40 @@ const routes = [
     },
     {
         path: '/notes',
-        name: 'register',
+        name: 'notes.index',
         component: () => import('../views/notes/NotesView.vue'),
+        meta: {
+            layout: 'AuthenticatedLayout'
+        }
+    },
+    {
+        path: '/notes/new',
+        name: 'notes.create',
+        component: () => import('../views/notes/NoteView.vue'),
+        meta: {
+            layout: 'AuthenticatedLayout'
+        }
+    },
+    {
+        path: '/notes/:id/edit',
+        name: 'notes.edit',
+        component: () => import('../views/notes/NoteView.vue'),
+        meta: {
+            layout: 'AuthenticatedLayout'
+        }
+    },
+    {
+        path: '/categories',
+        name: 'categories.index',
+        component: () => import('../views/categories/CategoriesView.vue'),
+        meta: {
+            layout: 'AuthenticatedLayout'
+        }
+    },
+    {
+        path: '/categories/:id',
+        name: 'categories.edit',
+        component: () => import('../views/categories/CategoryView.vue'),
         meta: {
             layout: 'AuthenticatedLayout'
         }

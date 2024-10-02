@@ -1,76 +1,104 @@
 <template>
-    <main>
 
+        <div
+            class="
+                p-8
+                flex
+                justify-between
+            "
+        >
+                
+            <h2
+                class="
+                    flex
+                    text-3xl
+                "
+            >
+                Listado de notas
+            </h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4  gap-4 mx-8 my-4" >
-
-            <div v-for="(i, index) in 10" class="
-                rounded-lg
-                border-2
-            ">
-                <img 
-                    class="
-                        rounded-t-lg
-                    "
-                    src="https://images.pexels.com/photos/1629212/pexels-photo-1629212.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" srcset="">
-
-                <div class="p-4" >
-
-                    <div 
-                        class="
-                            text-sm
-                            border-b
-                            pb-2
-                            mb-2
-                        "
-                    >
-
-                        <h2 
-                            class="
-                                text-xl
-                                mb-2
-                            "
-                            >
-                            terminar el diseño de la tarjeta para mostrar las notas
-                        </h2>
-
-                        <p class="
-                                text-xs
-                            " 
-                        >
-                            por Carlos Mateo Martinez Guerra
-                        </p>
-
-                    </div>
-                    
-                    <p  
-                        class="
-                            text-gray-900
-                            text-sm
-                            border-b
-                            pb-2
-                        "
-                    >
-                        el diseño debe ser minimalista, organizado y contar con los parametros descriptos en el correo
-                    </p>
-                    
-                    <p
-                        class="
-                            mt-2
-                            text-xs
-                            text-gray-950
-                        "
-                    >
-                        creado el 20/09/2024
-                    </p>
-                    
-                </div>
-
-            </div>
+            <ButtonLink
+                text="Nueva nota"
+                :to="{name: 'notes.create'}"
+            />
 
         </div>
 
-    </main>
+        <div
+            class="
+                flex
+                px-8
+                mb-8
+                items-center
+            "
+        >
+        <label for="order-by-date" >
+            Order por
+        </label>
+
+        <select v-model="sort" id="order-by-date" 
+            class="  
+                ml-2 
+                p-2
+                rounded-lg
+                outline-none
+                bg-[#127369]
+                text-white
+                hover:bg-[#0F5C4D]
+            "
+            @change="sortHandler"
+        >
+            <option value=""></option>
+            <option value="created_at">fecha creación, asc</option>
+            <option value="-created_at">fecha creación, desc</option>
+            <option value="expired_at">fecha vencimiento, asc</option>
+            <option value="-expired_at">fecha vencimiento, desc</option>
+        </select>
+
+        </div>
+
+        <div class="flex grow mb-24" >
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4  gap-4 mx-8" >
+                
+                <NoteCard 
+                    v-for="note in notes"
+                    :key="note.id"
+                    :note="note"
+                />
+                
+            </div>
+            
+        </div>
+
 </template>
 <script setup>
+import NoteCard from './components/NoteCard.vue';
+import ButtonLink from '../../components/ButtonLink.vue';
+import { ref, computed, onMounted } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+
+const notes = computed(() => store.state.note.notes);
+
+const sort = ref('');
+
+const fetchNotes = async (params = '') => {
+    await store.dispatch('note/getNotes', params);
+}
+
+const sortHandler = async (event) => {
+    const sort = event.target.value;
+    const params = new URLSearchParams();
+    if(sort) {
+        params.append('sort', sort)
+    }
+    await fetchNotes(params.toString());
+}
+
+onMounted(async () => {
+    await fetchNotes();
+})
+
 </script>
