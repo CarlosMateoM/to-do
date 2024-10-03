@@ -2,15 +2,17 @@
 
         <div
             class="
-                p-8
+                m-6
                 flex
+                flex-wrap
                 justify-between
+
             "
         >
                 
             <h2
                 class="
-                    flex
+                    my-2
                     text-3xl
                 "
             >
@@ -18,6 +20,9 @@
             </h2>
 
             <ButtonLink
+                class="
+                    my-2
+                "
                 text="Nueva nota"
                 :to="{name: 'notes.create'}"
             />
@@ -26,10 +31,8 @@
 
         <div
             class="
-                flex
-                px-8
-                mb-8
-                items-center
+                mx-8
+                mb-4
             "
         >
         <label for="order-by-date" >
@@ -38,8 +41,8 @@
 
         <select v-model="sort" id="order-by-date" 
             class="  
-                ml-2 
                 p-2
+                my-4
                 rounded-lg
                 outline-none
                 bg-[#127369]

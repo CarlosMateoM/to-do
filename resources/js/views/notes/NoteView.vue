@@ -20,7 +20,7 @@
 
         </div>
 
-        <form class="flex gap-4 px-8" @submit.prevent="submitHandler">
+        <form class="flex flex-col flex-wrap gap-4 px-8 mb-8" @submit.prevent="submitHandler">
 
             <div class="flex-1 space-y-6 " >
 
@@ -45,7 +45,7 @@
                         />
                 </div>
 
-                <div class="flex flex-wrap" >
+                <div class="flex flex-wrap " >
 
                     <label for="description">Descripción</label>
 
@@ -66,14 +66,17 @@
                     </textarea>
                 </div>
 
-                <div 
-                    class="
+                <div class="
                         flex
-                        space-x-2
+                        flex-wrap
+                        justify-between
+                        space-y-6
+                        sm:space-y-0
+                        
                     " 
                 >                
 
-                    <div class="flex flex-wrap" >
+                    <div class="w-full sm:w-5/12" >
 
                         <label for="created_at">Fecha de creación</label>
 
@@ -94,7 +97,7 @@
                             />
                     </div>
 
-                    <div class="flex flex-wrap" >
+                    <div class="w-full sm:w-5/12" >
 
                         <label for="expired_at">Fecha de vencimiento</label>
 
@@ -117,30 +120,12 @@
 
                 </div>
 
-                <div class="flex justify-between" >
-
-                    <Button 
-                        type="submit"
-                        :text=" route.name === 'notes.create' ? 'Crear nota' : 'Actualizar nota' "
-                        :isLoading="false"
-                    />
-
-                    <Button 
-                        v-if="route.name === 'notes.edit'"
-                        class="
-                            bg-red-500
-                            hover:bg-red-700
-                        "
-                        text="eliminar"
-                        :isLoading="false"
-                        @click="deleteNote"
-                    />
-
-                </div>
+              
 
             </div>
 
             <div class="flex-1" >
+
                 <div class="flex flex-wrap" >
 
                     <label for="image">Imagen</label>
@@ -152,13 +137,13 @@
                         placeholder="Imagen"
                         accept="image/*"
                         class=" 
-                            w-full
                             p-1.5
                             mt-2
+                            w-full
                             border 
-                            border-gray-300 
                             rounded-lg
                             outline-none
+                            border-gray-300 
                         "
                         @change="fileHandler"
                     />
@@ -168,17 +153,16 @@
                 <img :src="form.image" class="mt-2">
             </div>    
 
-            <div 
-                    class=""
-                >
+            <div class="flex-1 ">
 
                 <label> Categorias </label>
 
 
-                <div class="flex mt-4 flex-col gap-2">
+                <div class="flex mt-4 justify-end gap-2">
 
                         <div 
                             class="
+                
                                 bg-[#127369]
                                 text-white
                                 hover:bg-[#0F5C4D]
@@ -194,6 +178,31 @@
                         </div>
                         
                     </div>
+            </div>
+
+              <div class="flex flex-wrap justify-between" >
+
+                    <div>
+                        <Button 
+                            v-if="route.name === 'notes.edit'"
+                            class="
+                                my-2
+                            bg-red-500
+                            hover:bg-red-700
+                            "
+                            text="eliminar"
+                            :isLoading="false"
+                            @click="deleteNote"
+                        />
+                    </div>
+
+                    <Button 
+                        class="my-2"
+                        type="submit"
+                        :text=" route.name === 'notes.create' ? 'Crear nota' : 'Actualizar nota' "
+                        :isLoading="false"
+                    />
+
                 </div>
 
         </form>
@@ -219,7 +228,7 @@
         created_at: '',
         expired_at: '',
         image: null,
-    })
+    });
 
     const notesCategories = ref([]);
 
@@ -275,14 +284,18 @@
         const response = await store.dispatch('note/createNote', form.value);
 
         if(response.status === 201) {
+
             event.target.reset();
 
-            await store.dispatch('noteCategory/attachCategoryToNote',{ 
-                id: response.data.data.id,
-                data: {
-                    'category_id': notesCategories.value
-                }
-            })
+            if(notesCategories.value.length > 0) {
+
+                await store.dispatch('noteCategory/attachCategoryToNote',{ 
+                    id: response.data.data.id,
+                    data: {
+                        'category_id': notesCategories.value
+                    }
+                })
+            }
 
             router.push({name: 'notes.index'})
         }

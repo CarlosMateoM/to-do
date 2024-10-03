@@ -4,7 +4,7 @@
             <h1 class="text-3xl" >Notas</h1>
         </header>
         
-        <main class="flex grow" >
+        <main class="flex flex-col sm:flex-row flex-wrap grow" >
             <div class="flex-1" >
                 <img class="
                         object-cover

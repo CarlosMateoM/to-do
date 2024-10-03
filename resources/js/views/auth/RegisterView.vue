@@ -113,7 +113,6 @@
                         />
                 </div>
 
-                
                 <div >
                     <Button 
                         class="mt-4 mx-auto"
@@ -148,10 +147,10 @@
     const store = useStore();
 
     const registerForm = ref({
-        name: 'carlos',
-        email: 'carlos@correo.com',
-        password: '123456789',
-        password_confirmation: '123456789',
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
     });
 
     const errors = ref(null);

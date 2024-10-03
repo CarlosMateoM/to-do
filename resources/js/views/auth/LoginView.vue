@@ -114,8 +114,8 @@ const store = useStore();
 const errors = ref(null);
 
 const loginForm = ref({
-    email: 'carlos@correo.com',
-    password: '12345678'
+    email: '',
+    password: ''
 });
 
 
