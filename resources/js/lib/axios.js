@@ -3,7 +3,7 @@ import router from '../router';
 
 
 const axios = Axios.create({
-    baseURL: 'https://mateodevelopment.com/api/v1',
+    baseURL: 'https://mateodevelopment.online/api/v1',
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
